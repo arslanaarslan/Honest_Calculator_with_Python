@@ -1,0 +1,117 @@
+type: edu
+files:
+- name: honest_calc.py
+  visible: true
+  text: "msg_0 = \"Enter an equation\"\nmsg_1 = \"Do you even know what numbers are?\
+    \ Stay focused!\"\nmsg_2 = \"Yes ... an interesting math operation. You've slept\
+    \ through all classes, haven't you?\"\nmsg_3 = \"Yeah... division by zero. Smart\
+    \ move...\"\nmsg_4 = \"Do you want to store the result? (y / n):\" \nmsg_5 = \"\
+    Do you want to continue calculations? (y / n):\"\nmsg_6 = \" ... lazy\"\nmsg_7\
+    \ = \" ... very lazy\"\nmsg_8 = \" ... very, very lazy\"\nmsg_9 = \"You are\"\n\
+    \nop = ['+', '-', '/', '*']\nmemory = float(0)\n\ndef is_digit(msg):\n    if is_float(msg):\
+    \   #integer numbers are checked as well so no need to add another control for\
+    \ checking int\n        return True\n    else:\n        return False\n\ndef is_float(num):\n\
+    \    try:\n        float(num)\n        return True\n    except ValueError:\n \
+    \       return False\n\ndef calculate(op):\n    if op == '+':\n        result\
+    \ = x + y\n    elif op == '-':\n        result = x - y\n    elif op == '*':\n\
+    \        result = x * y\n    elif op == '/':\n        if y != 0:\n           \
+    \ result = x / y\n        else:\n            result = msg_3\n    return result\n\
+    \ndef check_func():\n    store_data()\n    if continue_calc() == False:\n    \
+    \    return False\n    else:\n        return True\n    \n\ndef store_data():\n\
+    \    global memory\n    print(msg_4)\n    inputMsg = input()\n    \n    if inputMsg\
+    \ == 'y':\n        memory = result\n    elif inputMsg != 'y' and inputMsg != 'n':\n\
+    \        check_func()\n  \ndef continue_calc():  \n    print(msg_5)    \n    inputMsg\
+    \ = input()  \n        \n    if inputMsg == 'n':\n        return False\n    elif\
+    \ inputMsg != 'y':\n        check_func()\n    return True\n    \ndef check(v1,\
+    \ v2, v3):\n    msg = \"\"\n    if is_one_digit(v1) and is_one_digit(v2):\n  \
+    \      msg = msg + msg_6\n        \n    if ((is_digit(v1) and (float(v1) == 1))\
+    \ or (is_digit(v2) and (float(v2) == 1))) and v3 == '*' : \n        msg = msg\
+    \ + msg_7\n    \n    if ((is_digit(v1) and (float(v1) == 0)) or (is_digit(v2)\
+    \ and (float(v2) == 0))) and (v3 == '*' or v3 == '+' or v3 == '-'): \n       \
+    \ msg = msg + msg_8\n    \n    if(msg != ''):\n        msg = msg_9 + msg\n   \
+    \     print(msg)\n        \ndef is_one_digit(v):\n    if v>-10 and v<10 and v.is_integer():\n\
+    \        return True\n    else:\n        return False\n\n    \nwhile (True):\n\
+    \    print(msg_0)\n    rcv_msg = input().split(\" \")\n    \n    if rcv_msg[0]\
+    \ == 'M':\n        rcv_msg[0] = memory\n    elif rcv_msg[2] == 'M':\n        rcv_msg[2]\
+    \ = memory\n    \n    if not (is_digit(rcv_msg[0]) and is_digit(rcv_msg[2])):\n\
+    \        print(msg_1)\n    elif not rcv_msg[1] in op:\n        print(msg_2)\n\
+    \    else:\n        x = float(rcv_msg[0])\n        y = float(rcv_msg[2])\n   \
+    \ \n        check(x, y, rcv_msg[1])\n        \n        result = calculate(rcv_msg[1])\n\
+    \        print(result)\n        \n        if result != msg_3 and check_func()\
+    \ == False :\n            break\n        \n      "
+  learner_created: false
+- name: tests.py
+  visible: false
+  text: |
+    from test.tests import HonestCalc
+
+    if __name__ == '__main__':
+        HonestCalc().run_tests()
+  learner_created: false
+- name: test/tests.py
+  visible: false
+  text: |
+    from hstest import StageTest, CheckResult, WrongAnswer, dynamic_test, TestedProgram
+
+    msg = ["Enter an equation",
+           "Do you even know what numbers are? Stay focused!",
+           "Yes ... an interesting math operation. You've slept through all classes, haven't you?",
+           "Yeah... division by zero. Smart move...",
+           "Do you want to store the result? (y / n):",
+           "Do you want to continue calculations? (y / n):",
+           " ... lazy",
+           " ... very lazy",
+           " ... very, very lazy",
+           "You are",
+           "Are you sure? It is only one digit! (y / n)",
+           "Don't be silly! It's just one number! Add to the memory? (y / n)",
+           "Last chance! Do you really want to embarrass yourself? (y / n)"
+    ]
+
+
+    def add_enter(txt):
+        return "\n".join([txt, msg[0]])
+
+
+    def add_memory(txt):
+        return "\n".join([txt, msg[4]])
+
+
+    data = [(("4 * 5.0", "\n".join([msg[9] + msg[6], add_memory("20.0")])), ("n", msg[5]), ("n", "")),
+            (("2 + 5.5", add_memory("7.5")), ("y", msg[5]), ("y", msg[0]), ("M - 9", add_memory("-1.5")), ("n", msg[5]), ("n", "")),
+            (("225 / 15", add_memory("15.0")), ("y", msg[5]), ("y",msg[0]),
+             ("1 * 5", "\n".join([msg[9] + msg[6] + msg[7], add_memory("5.0")])), ("y", msg[10]), ("y", msg[11]), ("n", msg[5]), ("y", msg[0]),
+            ("M - 10", add_memory("5.0")), ("y", msg[10]), ("y", msg[11]), ("y", msg[12]), ("y", msg[5]), ("y", msg[0]),
+             ("M / M",  "\n".join([msg[9] + msg[6], add_memory("1.0")])), ("n", msg[5]), ("n", "")),
+           ]  # (input data, msg sentence])
+
+
+    class HonestCalc(StageTest):
+        @dynamic_test(data=data)
+        def test(self, *items):
+            pr = TestedProgram()
+            output = pr.start()
+            if msg[0] not in output:
+                return CheckResult.wrong(f"Expected: ({msg[0]});\nFound:    ({output.strip()})")
+            for item in items:
+                output = pr.execute(item[0])
+                if item[1] != output.strip():
+                    return CheckResult.wrong(f"Expected:\n{item[1]}\nFound:\n{output.strip()}")
+            if not pr.is_finished():
+                return CheckResult.wrong("Your program unnecessarily waiting for input.")
+            return CheckResult.correct()
+
+
+    if __name__ == '__main__':
+        HonestCalc().run_tests()
+  learner_created: false
+- name: test/__init__.py
+  visible: false
+  learner_created: false
+feedback_link: https://hyperskill.org/projects/208/stages/1043/implement#comment
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: "Thu, 03 Nov 2022 20:55:09 UTC"
+record: 4
